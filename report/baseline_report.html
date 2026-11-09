@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Ubuntu安全基线巡检报告</title>
+<style>
+table{border-collapse:collapse;width:90%;margin:20px auto;}
+th,td{border:1px solid #ccc;padding:8px 12px;}
+.pass{background:#d4edda;color:#155724}
+.fail{background:#f8d7da;color:#721c24}
+h2{text-align:center}
+</style>
+</head>
+<body>
+<h2>Ubuntu安全基线巡检报告</h2>
+<table>
+<tr><th>检查项</th><th>执行命令</th><th>预期结果</th><th>状态</th><th>输出</th></tr>
+
+<tr class="fail">
+<td>检查SSH是否禁止root登录</td>
+<td>grep 'PermitRootLogin' /etc/ssh/sshd_config</td>
+<td>no</td>
+<td>fail</td>
+<td>#PermitRootLogin prohibit-password
+# the setting of "PermitRootLogin prohibit-password".</td>
+</tr>
+
+<tr class="fail">
+<td>检查防火墙ufw是否开启</td>
+<td>ufw status</td>
+<td>active</td>
+<td>fail</td>
+<td></td>
+</tr>
+
+<tr class="pass">
+<td>检查密码最大有效期</td>
+<td>grep 'PASS_MAX_DAYS' /etc/login.defs</td>
+<td>PASS_MAX_DAYS</td>
+<td>pass</td>
+<td>#	PASS_MAX_DAYS	Maximum number of days a password may be used.
+PASS_MAX_DAYS	99999</td>
+</tr>
+
+<tr class="pass">
+<td>检查系统是否存在空密码账号</td>
+<td>awk -F: '$2=="" {print $1}' /etc/shadow</td>
+<td></td>
+<td>pass</td>
+<td></td>
+</tr>
+
+<tr class="fail">
+<td>检查系统历史命令记录开启</td>
+<td>echo $HISTCONTROL</td>
+<td>ignoredups</td>
+<td>fail</td>
+<td></td>
+</tr>
+</table></body></html>
